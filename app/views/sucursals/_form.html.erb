@@ -1,0 +1,256 @@
+<%= form_with(model: sucursal, local: true) do |form| %>
+  <% if sucursal.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sucursal.errors.count, "error") %> prohibited this sucursal from being saved:</h2>
+
+      <ul>
+        <% sucursal.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div id="division" class="settings"> <!-- Formulario para verificar los datos ingresados por medio de Javascript -->
+      <label>Nombre de sucursal</label>
+      <input id="nomSucursal" type="text" title="nomCompleto" placeholder="Nombre de sucursal" autocomplete="off"/>
+      <br><br>
+      <label>Calle</label>
+      <input id="calle" type="text" title="email" placeholder="Calle" autocomplete="off"/>
+      <br><br>
+      <label>Colonia</label>
+      <input id="colonia" type="text" title="rfc" placeholder="Colonia" maxlength="13" autocomplete="off"/>
+      <br><br>
+      <label>Numero exterior</label>
+      <input id="numExterior" type="text" title="nomEmpresa" placeholder="Numero exterior" autocomplete="off"/>
+      <br><br>
+      <label>Numero interior</label>
+      <input id="numInterior" type="text" title="pass" placeholder="Numero interior" autocomplete="off"/>
+      <br><br>
+      <label>Codigo postal</label>
+      <input id="cpostal" type="text" title="passC" placeholder="Codigo postal" autocomplete="off"/>
+      <br><br>
+      <label>Ciudad</label>
+      <input id="ciudad" type="text" title="passC" placeholder="Ciudad" autocomplete="off"/>
+      <br><br>
+      <label>Pais</label>
+      <input id="pais" type="text" title="passC" placeholder="Pais" autocomplete="off"/>
+      <br><br>
+  </div>
+  <div id="division2">
+    <button id="btn" onclick="ingreso()" type="button" class="btn">Registrar</button>
+    <br>
+      <label id="aviso" type="hidden" style="color: #ff0000"></label>
+      <br>
+      <label id="numext" type="hidden" style="color: #ff0000"></label>
+      <br>
+      <label id="numint" type="hidden" style="color: #ff0000"></label>
+      <br>
+      <label id="cp" type="hidden" style="color: #ff0000"></label>
+      <br>
+      <a href="http://localhost:3000/sucursals">Volver a la pagina principal</a>
+      </div>
+
+<div id="formulario" class="settings" hidden>
+  <div class="field">
+    <%= form.label :nomSucursal %>
+    <%= form.text_field :nomSucursal ,:value =>"nSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :calle %>
+    <%= form.text_field :calle ,:value =>"cSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :colonia %>
+    <%= form.text_field :colonia ,:value =>"coSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :numExterior %>
+    <%= form.text_field :numExterior ,:value =>"nxSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :numInterior %>
+    <%= form.text_field :numInterior ,:value =>"niSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :cpostal %>
+    <%= form.text_field :cpostal ,:value =>"cpSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :ciudad %>
+    <%= form.text_field :ciudad ,:value =>"ciSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :pais %>
+    <%= form.text_field :pais ,:value =>"pSucursal",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :empresa %>
+    <%= form.text_field :empresa ,:value =>"eSucursal",:readonly => true%>
+  </div>
+
+<label style="color: #11bb77">
+    Datos verificados. Listos para el registro.
+  </label>
+
+  <br>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+</div>
+
+<div> <!-- Codigo javascript, se verifica si los datos ingresados por el usuario cumplen con las condiciones -->
+    <script type="text/javascript">
+      var lock, nomSucursal, calle, colonia, numExterior, numInterior, cpostal, ciudad, pais, empresa;
+      let nomSucursals = [], calles = [], colonias = [], numExteriors = [], numInteriors = [], cpostals = [], ciudads = [], paiss = []; 
+      var keys = Object.keys(localStorage), i, lock;
+      i = keys.length;
+      var numeros = /^[0-9]+$/;
+      var letras = /^[0-9a-zA-Z]+$/;
+      empresa = localStorage.getItem("uempresa");
+
+      if(localStorage.getItem("editsucursal")!=null){
+        ingreso();
+      }
+
+      if(localStorage.getItem("edit")==null)
+      {
+        document.getElementById("nomSucursal").readOnly = false;
+      } else {
+        var row=document.getElementById("empleados");
+        document.getElementById("nomSucursal").readOnly = true;
+        document.getElementById("empleados").hidden = false;
+      }
+      //localStorage.removeItem("edit");
+
+          //Los registros almacenados se guardan en vectores locales, luego se eliminan del storage de inmediato
+          for(var j=0; j<i; j++) {
+            emails.push(localStorage.getItem("nomSucursal"+j));
+          }
+
+          //En la funcion ingreso, se señala con cuadros rojos los campos erroneos y su respectivo mensaje
+          function ingreso(){
+                if(localStorage.getItem("editsucursal")!=null){
+                  nomSucursal=localStorage.getItem("EnomSucursal");
+                  calle=localStorage.getItem("Ecalle");
+                  colonia=localStorage.getItem("Ecolonia");
+                  numExterior=localStorage.getItem("EnumExterior");
+                  numInterior=localStorage.getItem("EnumInterior");
+                  cpostal=localStorage.getItem("Ecpostal");
+                  ciudad=localStorage.getItem("Eciudad");
+                  pais=localStorage.getItem("Epais");
+
+                  verificacion();
+                }
+
+                nomSucursal=document.getElementById("nomSucursal").value;
+                calle=document.getElementById("calle").value;
+                colonia=document.getElementById("colonia").value;
+                numExterior=document.getElementById("numExterior").value;
+                numInterior=document.getElementById("numInterior").value;
+                cpostal=document.getElementById("cpostal").value;
+                ciudad=document.getElementById("ciudad").value;
+                pais=document.getElementById("pais").value;
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("numext").innerHTML = "";
+                document.getElementById("numint").innerHTML = "";
+                document.getElementById("cp").innerHTML = "";
+                //window.alert("");
+
+                if(!(nomSucursal.match(letras))){
+                  document.getElementById("aviso").hidden = false;
+                  document.getElementById("aviso").innerHTML = "-> El nombre de sucursal no es valido (no caracteres especiales)";
+                  document.getElementById("nomSucursal").style="border:2px solid #ff0000";lock=1;
+                } else {
+                  document.getElementById("aviso").hidden = true;
+                  document.getElementById("nomSucursal").style="border:2px solid #000000";
+                }
+
+                if(numExterior!="")
+                  if(!(numExterior.match(numeros))){
+                    document.getElementById("numext").hidden = false;
+                    document.getElementById("numext").innerHTML = "-> El numero exterior no es valido (solo numeros)"; 
+                    document.getElementById("numExterior").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("numext").hidden = true;
+                    document.getElementById("numExterior").style="border:2px solid #000000";
+                  }
+
+                if(numInterior!="")
+                  if(!(numInterior.match(numeros))){
+                    document.getElementById("numint").hidden = false;
+                    document.getElementById("numint").innerHTML = "-> El numero interior no es valido (solo numeros)"; 
+                    document.getElementById("numInterior").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("numint").hidden = true;
+                    document.getElementById("numInterior").style="border:2px solid #000000";
+                  }
+
+                if(cpostal!="")
+                  if(!(cpostal.match(numeros))){
+                    document.getElementById("cp").hidden = false;
+                    document.getElementById("cp").innerHTML = "-> El codigo postal solo debe contener numeros"; 
+                    document.getElementById("cpostal").style="border:2px solid #ff0000";lock=1;
+                  } else if(cpostal.length!=5){
+                    document.getElementById("cp").hidden = false;
+                    document.getElementById("cp").innerHTML = "-> El codigo postal solo debe contener 5 numeros"; 
+                    document.getElementById("cpostal").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("cp").hidden = true;
+                    document.getElementById("cpostal").style="border:2px solid #000000";
+                  }
+
+                //Con lock, se verifica si todos los campos son correctos, de ser asi, prosigue al registro oficial de datos
+                if(lock==0){
+                  verificacion();
+                }
+          }
+
+
+          //funcion verificacion: cambia los valores de los inputs oficiales de registro a los personales de HTML
+          //Se elimina el tag de division correspondiente a los campos manuales
+          //Hace visible el formulario oficial con los datos listos para ser registrados a MySQL
+          function verificacion()
+          {
+            var exito=0;
+            if(localStorage.getItem("editsucursal")!=null){
+              localStorage.removeItem("editsucursal");
+            } else {
+            for(var x=0; x<i; x++){
+              if(nomSucursal==nomSucursals[x]){
+                  document.getElementById("aviso").innerHTML = "-> La sucursal ya se encuentra en existencia";
+                  document.getElementById("nomSucursal").style="border:2px solid #ff0000"; exito=1;
+              }
+            }
+          }
+            if(exito==0){
+              document.body.innerHTML = document.body.innerHTML.replace(/nSucursal/g, nomSucursal);
+              document.body.innerHTML = document.body.innerHTML.replace(/cSucursal/g, calle);
+              document.body.innerHTML = document.body.innerHTML.replace(/coSucursal/g, colonia);
+              document.body.innerHTML = document.body.innerHTML.replace(/nxSucursal/g, numExterior);
+              document.body.innerHTML = document.body.innerHTML.replace(/niSucursal/g, numInterior);
+              document.body.innerHTML = document.body.innerHTML.replace(/cpSucursal/g, cpostal);
+              document.body.innerHTML = document.body.innerHTML.replace(/ciSucursal/g, ciudad);
+              document.body.innerHTML = document.body.innerHTML.replace(/pSucursal/g, pais);
+              document.body.innerHTML = document.body.innerHTML.replace(/eSucursal/g, empresa);
+              document.getElementById("division").remove();
+              document.getElementById("division2").remove();
+              document.getElementById("formulario").hidden = false;
+
+            }
+          }
+          
+    </script>
+  </div>
+
+<% end %>

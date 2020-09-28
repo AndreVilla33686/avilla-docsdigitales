@@ -1,0 +1,195 @@
+<%= form_with(model: empleado, local: true) do |form| %>
+  <% if empleado.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(empleado.errors.count, "error") %> prohibited this empleado from being saved:</h2>
+
+      <ul>
+        <% empleado.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<body onload="sucursalFiltro()">
+<div> <!-- Codigo javascript, se verifica si los datos ingresados por el usuario cumplen con las condiciones -->
+    <script type="text/javascript">
+      var lock, campo, nomEmpleado, sucursal, rfc, puesto;
+      let nomEmpleados = [], sucursals = [], rfcs = [], puestos = []; 
+      var keys = Object.keys(localStorage), i, lock, email, pass;
+      i = keys.length;
+      var numeros = /^[0-9]+$/;
+      var letras = /^[0-9a-zA-Z ]+$/;
+              //Los registros almacenados se guardan en vectores locales, luego se eliminan del storage de inmediato
+          for(var j=0; j<i; j++) {
+            nomEmpleados.push(localStorage.getItem("nomEmpleado"+j));
+            rfcs.push(localStorage.getItem("rfc"+j));
+            sucursals.push(localStorage.getItem("sucursal"+j));
+            puestos.push(localStorage.getItem("puesto"+j));
+          }
+
+          function sucursalFiltro(){
+              for(var j=0; j<i; j++){
+                  var z = document.getElementById("sucursal");
+                  var option = document.createElement("option");
+                  var s = localStorage.getItem("nomSucursal"+j);
+                  if(s!=null){
+                    if(localStorage.getItem("empresa"+j)==localStorage.getItem("uempresa")){
+                      option.text = localStorage.getItem("nomSucursal"+j);
+                      z.add(option);
+                    }
+                  }
+                }
+            }
+
+          //En la funcion ingreso, se señala con cuadros rojos los campos erroneos y su respectivo mensaje
+          function ingreso(){
+                nomEmpleado=document.getElementById("nomEmpleado").value;
+                rfc=document.getElementById("rfc").value;
+                sucursal=document.getElementById("sucursal").value;
+                puesto=document.getElementById("puesto").value;
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("password").innerHTML = "";
+                document.getElementById("claverfc").innerHTML = "";
+
+                if(!(nomEmpleado.match(letras))){
+                  document.getElementById("aviso").innerHTML = "-> Nombre de empleado invalido (solo caracteres)";
+                  document.getElementById("nomEmpleado").style="border:2px solid #ff0000"; lock=1;
+                }
+                else{
+                  document.getElementById("nomEmpleado").style="border:2px solid #000000";
+                }
+
+                if(!(rfc.match(letras))){
+                  document.getElementById("password").innerHTML = "-> RFC invalido (solo caracteres)";
+                  document.getElementById("rfc").style="border:2px solid #ff0000"; lock=1;
+                }
+                else if(rfc.length<12){
+                  document.getElementById("password").innerHTML = "-> RFC invalido (no menos de 12 caracteres)";
+                  document.getElementById("rfc").style="border:2px solid #ff0000"; lock=1;
+                } else{
+                  document.getElementById("rfc").style="border:2px solid #000000";
+                }
+
+                if(sucursal==""){
+                  document.getElementById("sucursalL").innerHTML = "-> Sucursal invalida (Si no existe alguna, registre una)";
+                  document.getElementById("sucursal").style="border:2px solid #ff0000"; lock=1;
+                }
+                else{
+                  document.getElementById("sucursal").style="border:2px solid #000000";
+                }
+
+                if(!(puesto.match(letras))){
+                  document.getElementById("claverfc").innerHTML = "-> Puesto invalido (solo caracteres)";
+                  document.getElementById("puesto").style="border:2px solid #ff0000"; lock=1;
+                }
+                else{
+                  document.getElementById("puesto").style="border:2px solid #000000";
+                }
+
+                //Con lock, se verifica si todos los campos son correctos, de ser asi, prosigue al registro oficial de datos
+                if(lock==0){
+                  verificacion();
+                }
+          }
+
+          //funcion verificacion: cambia los valores de los inputs oficiales de registro a los personales de HTML
+          //Se elimina el tag de division correspondiente a los campos manuales
+          //Hace visible el formulario oficial con los datos listos para ser registrados a MySQL
+          function verificacion()
+          {
+            var exito=0;
+            for(var x=0; x<i; x++){
+              if(rfc==rfcs[x]){
+                if(sucursal==sucursals[x]){
+                  document.getElementById("aviso").innerHTML = "-> Este empleado ya esta dado de alta en la sucursal";
+                  document.getElementById("nomEmpleado").style="border:2px solid #ff0000"; exito=1;
+                }
+              }
+            }
+            if(exito==0){
+              document.body.innerHTML = document.body.innerHTML.replace(/v1/g, nomEmpleado);
+              document.body.innerHTML = document.body.innerHTML.replace(/v2/g, sucursal);
+              document.body.innerHTML = document.body.innerHTML.replace(/v3/g, rfc);
+              document.body.innerHTML = document.body.innerHTML.replace(/v4/g, puesto);
+              document.getElementById("division").remove();
+              document.getElementById("division2").remove();
+              document.getElementById("formulario").hidden = false;
+            }
+          }
+    </script>
+  </div>
+
+
+  <div id="division" class="settings"> <!-- Formulario para verificar los datos ingresados por medio de Javascript -->
+      <label>Nombre del empleado</label>
+      <input id="nomEmpleado" type="text" title="nomCompleto" placeholder="Nombre del empleado" autocomplete="off"/>
+      <br><br>
+      <label>Sucursal</label>
+      <select id="sucursal"></select>
+      <br><br>
+      <label>RFC</label>
+      <input id="rfc" type="text" title="rfc" placeholder="RFC" maxlength="13" autocomplete="off"/>
+      <br><br>
+      <label>Puesto</label>
+      <input id="puesto" type="text" title="nomEmpresa" placeholder="Puesto" autocomplete="off"/>
+      <br><br>
+    </div>
+    <div id="division2">
+    <button id="btn" onclick="ingreso()" type="button" class="btn">Registrar</button>
+      <br>
+      <label id="aviso" style="color: #ff0000"></label>
+      <label id="password" style="color: #ff0000"></label>
+      <label id="sucursalL" style="color: #ff0000"></label>
+      <label id="claverfc" style="color: #ff0000"></label>
+      <br><br>
+    </div>
+
+
+<div id="formulario" class="settings" hidden>
+  <div class="field">
+    <%= form.label :nomEmpleado %>
+    <%= form.text_field :nomEmpleado ,:value =>"v1",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :sucursal %>
+    <%= form.text_field :sucursal ,:value =>"v2",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :rfc %>
+    <%= form.text_field :rfc ,:value =>"v3",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :puesto %>
+    <%= form.text_field :puesto ,:value =>"v4",:readonly => true%>
+  </div>
+
+<label style="color: #11bb77">
+    Datos verificados. Listos para el registro.
+  </label>
+
+  <br>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+</div>
+</body>
+
+<script type="text/javascript">
+  if(localStorage.getItem("Uempleado")!=null){
+        document.body.innerHTML = document.body.innerHTML.replace(/v1/g, localStorage.getItem("UnombreEmp"));
+        document.body.innerHTML = document.body.innerHTML.replace(/v2/g, localStorage.getItem("UsucursalEmp"));
+        document.body.innerHTML = document.body.innerHTML.replace(/v3/g, localStorage.getItem("Uempleado"));
+        document.body.innerHTML = document.body.innerHTML.replace(/v4/g, localStorage.getItem("Upuesto"));
+        localStorage.removeItem("Uempleado");
+        document.getElementById("division").remove();
+        document.getElementById("division2").remove();
+        document.getElementById("formulario").hidden = false;
+      }
+</script>
+<% end %>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>/*********************** eliminamos los spinners de los campos number***************************/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>
+
+	<style type="text/css">/************************** El formato css de la pagina**************************/
+body {
+  font-family: 'open sans', helvetica, arial, sans; 
+
+}
+
+.log-form {
+  width: 40%;
+  min-width: 320px;
+  max-width: 475px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+-moz-transform: translate(-50%,-50%);
+-o-transform: translate(-50%,-50%);
+-ms-transform: translate(-50%,-50%);
+transform: translate(-50%,-50%);
+  
+  box-shadow: 0px 2px 5px rgba(0,0,0,.25);
+  
+  @media(max-width: 40em){
+    width: 95%;
+    position: relative;
+    margin: 2.5% auto 0 auto;
+    left: 0%;
+  -webkit-transform: translate(0%,0%);
+-moz-transform: translate(0%,0%);
+-o-transform: translate(0%,0%);
+-ms-transform: translate(0%,0%);
+transform: translate(0%,0%);
+  }
+  
+  form {
+    display: block;
+    width: 100%;
+    padding: 2em;
+  }
+  
+  h2 {
+    width: 100%;
+    color: lighten(@grey, 20%);
+    font-family: 'open sans condensed';
+    font-size: 1.35em;
+    display: block;
+    background:@grey;
+    width: 100%;
+    text-transform: uppercase;
+    padding: .75em 1em .75em 1.5em;
+    box-shadow:inset 0px 1px 1px fadeout(white, 95%);
+    border: 1px solid darken(@grey, 5%);
+    //text-shadow: 0px 1px 1px darken(@grey, 5%);
+    margin: 0;
+    font-weight: 200;
+  }
+  
+  input {
+    display: block;
+    margin: auto auto;
+    width: 100%;
+    margin-bottom: 2em;
+    padding: .5em 0;
+    border: none;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1.25em;
+    color: #757575;
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .btn {
+    display: inline-block;
+    background: @blue;
+    border: 1px solid darken(@blue, 5%);
+    padding: .5em 2em;
+    color: white;
+    margin-right: .5em;
+    box-shadow: inset 0px 1px 0px fadeout(white, 80%); 
+    &:hover {
+      background: lighten(@blue, 5%);
+    }
+    &:active {
+      background: @blue; 
+      box-shadow: inset 0px 1px 1px fadeout(black, 90%); 
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+  
+ 
+  
+}
+	</style>
+</head>
+<body>
+<div class="log-form">
+	<script type="text/javascript">
+	function ingreso(){
+                var nomSucursal=document.getElementById("nomSucursal").value;
+                var calle=document.getElementById("calle").value;
+                var colonia=document.getElementById("colonia").value;
+                var numExt=document.getElementById("numExt").value;
+                var numInt=document.getElementById("numInt").value;
+                var codPostal=document.getElementById("codPostal").value;
+                var ciudad=document.getElementById("ciudad").value;
+                var pais=document.getElementById("pais").value;
+                document.getElementById("aviso").innerHTML = "";
+
+                if(nomSucursal=="")
+                {
+                	document.getElementById("aviso").innerHTML = "Favor de ingresar un nombre de sucursal válido";
+                }
+            }
+</script>
+  <h2>Registrar Sucursal</h2>
+  <form>
+    <input id="nomSucursal" type="text" title="nomSucursal" placeholder="Nombre de sucursal" />
+    <br><br>
+    <input id="calle" type="text" title="calle" placeholder="Calle" />
+    <br><br>
+    <input id="colonia" type="text" title="colonia" placeholder="Colonia" />
+    <br><br>
+    <input id="numExt" type="number" title="numExt" placeholder="Número Exterior" />
+    <br><br>
+    <input id="numInt" type="number" title="numInt" placeholder="Número Interior" />
+    <br><br>
+    <input id="codPostal" title="codPostal" placeholder="Código Postal" 
+    	oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+    	type = "number"
+    	maxlength = "5"/>
+    <br><br>
+    <input id="ciudad" type="text" title="ciudad" placeholder="Ciudad" />
+    <br><br>
+    <input id="pais" type="text" title="pais" placeholder="País" />
+    <br><br>
+    <button onclick="ingreso()" type="button" class="btn">Registrar</button>
+    <br><br>
+    <label id="aviso" style="color: #ff0000"></label>
+    <br><br>
+    <a href="http://localhost:3000/sys/admon">Regresar a la Página Principal</a>
+  </form>
+</div><!--end log form -->
+
+</body>
+</html>

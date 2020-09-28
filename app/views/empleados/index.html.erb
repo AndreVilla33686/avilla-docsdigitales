@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+<canvas id="myCanvas" width="500" height="1000" style="border:0px solid #D3D3D3;">
+    </canvas>
+<h1>Empleados</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nomempleado</th>
+      <th>Sucursal</th>
+      <th>Rfc</th>
+      <th>Puesto</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <script type="text/javascript">
+    localStorage.removeItem("Uempleado");
+    var i=0;
+    var keys = Object.keys(localStorage), num=keys.length;
+    for(var j=0; j<num; j++){
+      localStorage.removeItem("nomEmpleado"+j);
+      localStorage.removeItem("sucursal"+j);
+      localStorage.removeItem("rfc"+j);
+      localStorage.removeItem("puesto"+j);
+    }
+  </script>
+
+  <tbody>
+    <% @empleados.each do |empleado| %>
+      <tr>
+        <td id="nomEmpleado"><%= empleado.nomEmpleado %></td>
+        <td id="sucursal"><%= empleado.sucursal %></td>
+        <td id="rfc"><%= empleado.rfc %></td>
+        <td id="puesto"><%= empleado.puesto %></td>
+        <td><%= link_to 'Show', empleado %></td>
+        <td><%= link_to 'Edit', edit_empleado_path(empleado) %></td>
+        <td><%= link_to 'Destroy', empleado, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <script type="text/javascript">
+          localStorage.setItem("nomEmpleado"+i, document.getElementById("nomEmpleado").innerText);
+          localStorage.setItem("sucursal"+i, document.getElementById("sucursal").innerText);
+          localStorage.setItem("rfc"+i, document.getElementById("rfc").innerText);
+          localStorage.setItem("puesto"+i, document.getElementById("puesto").innerText);
+          document.getElementById("nomEmpleado").remove();
+          document.getElementById("sucursal").remove();
+          document.getElementById("rfc").remove();
+          document.getElementById("puesto").remove();
+          i++;
+        </script>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<meta http-equiv = "refresh" content = "0; url = http://localhost:3000/sys/admon"/>
+<br>
+
+<%= link_to 'New Empleado', new_empleado_path %>

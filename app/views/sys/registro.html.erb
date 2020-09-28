@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+<div class="log-form">
+  <h2>Registrarse</h2>
+  <form>
+    <label>Nombre</label>
+      <input id="nomCompleto" type="text" title="nomCompleto" placeholder="Nombre Completo" />
+      <br><br>
+      <label>Correo Electrónico</label>
+      <input id="email" type="text" title="email" placeholder="Correo Electrónico" />
+      <br><br>
+      <label>RFC</label>
+      <input id="rfc" type="text" title="rfc" placeholder="RFC" maxlength="13"/>
+      <br><br>
+      <label>Empresa</label>
+      <input id="nomEmpresa" type="text" title="nomEmpresa" placeholder="Nombre de la Empresa" />
+      <br><br>
+      <label>Contraseña</label>
+      <input id="pass" type="password" title="pass" placeholder="Contraseña" />
+      <br><br>
+      <label>Confirmar contraseña</label>
+      <input id="passC" type="password" title="passC" placeholder="Confirmar Contraseña" />
+      <br><br>
+      <button onclick="ingreso()" type="button" class="btn">Registrar</button>
+      <br><br>
+      <label id="aviso" style="color: #ff0000"></label>
+      <label id="password" style="color: #ff0000"></label>
+      <label id="claverfc" style="color: #ff0000"></label>
+      <br><br>
+      <a href="http://localhost:3000/sys/iniciosesion">Volver a inicio de sesión</a>
+
+    <script type="text/javascript">
+      var lock, campo, nomCompleto, email, rfc, nomEmpresa, pass, passC;
+
+          function ingreso(){
+                nomCompleto=document.getElementById("nomCompleto").value;
+                email=document.getElementById("email").value;
+                rfc=document.getElementById("rfc").value;
+                nomEmpresa=document.getElementById("nomEmpresa").value;
+                pass=document.getElementById("pass").value;
+                passC=document.getElementById("passC").value;
+                let vec = ["nomCompleto", "email", "rfc", "nomEmpresa", "pass", "passC"];
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("password").innerHTML = "";
+                document.getElementById("claverfc").innerHTML = "";
+
+                for(var i=0; i<vec.length; i++){
+                  campo=vec[i];
+                  vacio();
+                }
+
+                if(pass!=passC || pass==""){
+                  document.getElementById("password").innerHTML = "-> Las contraseñas no coinciden";
+                  document.getElementById("passC").style="border:2px solid #ff0000";
+                  document.getElementById("pass").style="border:2px solid #ff0000";lock=1;
+                }
+                else{
+                  document.getElementById("passC").style="border:2px solid #000000";
+                  document.getElementById("pass").style="border:2px solid #000000";
+                }
+
+                if(rfc.length<12){
+                  document.getElementById("claverfc").innerHTML = "-> La clave RFC debe tener un mínimo de 12 caracteres";
+                  document.getElementById("rfc").style="border:2px solid #ff0000";lock=1;
+                }
+                else{
+                  document.getElementById("rfc").style="border:2px solid #000000"; 
+                }
+
+                if(lock==0){
+                  verificacion();
+                }
+          }
+
+          function vacio(){
+              if(document.getElementById(campo).value==""){
+              document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+              document.getElementById(campo).style="border:2px solid #ff0000";lock=1;
+            }
+            else{
+              document.getElementById(campo).style="border:2px solid #000000";
+            }
+          }
+
+          function verificacion()
+          {
+            document.body.innerHTML = document.body.innerHTML.replace(/nUsuario/g, nomCompleto);
+            document.body.innerHTML = document.body.innerHTML.replace(/eUsuario/g, email);
+            document.body.innerHTML = document.body.innerHTML.replace(/rUsuario/g, rfc);
+            document.body.innerHTML = document.body.innerHTML.replace(/emUsuario/g, nomEmpresa);
+            document.body.innerHTML = document.body.innerHTML.replace(/pUsuario/g, pass);
+            document.body.innerHTML = document.body.innerHTML.replace(/pcUsuario/g, passC);
+          }
+    </script>
+  </form>
+</div><!--end log form -->
+
+</body>
+</html>
+
+
+
+
+

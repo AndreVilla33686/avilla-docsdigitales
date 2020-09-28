@@ -1,0 +1,194 @@
+<p id="notice"><%= notice %></p>
+<%= form_with(model: usuario, local: true) do |form| %>
+  <% if usuario.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(usuario.errors.count, "error") %> prohibited this usuario from being saved:</h2>
+
+      <ul>
+        <% usuario.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div> <!-- Codigo javascript, se verifica si los datos ingresados por el usuario cumplen con las condiciones -->
+    <script type="text/javascript">
+      var lock, campo, nomCompleto, email, rfc, nomEmpresa, pass, passC;
+      let vec = ["nomCompleto", "email", "rfc", "nomEmpresa", "pass", "passC"];
+      let emails = [], rfcs = [], passwords = [], empresas = []; 
+      var keys = Object.keys(localStorage), i, lock, email, pass;
+      i = keys.length/4;
+
+              //Los registros almacenados se guardan en vectores locales, luego se eliminan del storage de inmediato
+          for(var j=0; j<i; j++) {
+            emails.push(localStorage.getItem("uemail"+j));
+            rfcs.push(localStorage.getItem("urfc"+j));
+            passwords.push(localStorage.getItem("upassword"+j));
+            empresas.push(localStorage.getItem("uempresa"+j));
+          }
+
+          //En la funcion ingreso, se señala con cuadros rojos los campos erroneos y su respectivo mensaje
+          function ingreso(){
+                nomCompleto=document.getElementById("nomCompleto").value;
+                email=document.getElementById("email").value;
+                rfc=document.getElementById("rfc").value;
+                nomEmpresa=document.getElementById("nomEmpresa").value;
+                pass=document.getElementById("pass").value;
+                passC=document.getElementById("passC").value;
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("password").innerHTML = "";
+                document.getElementById("claverfc").innerHTML = "";
+
+                for(var i=0; i<vec.length; i++){
+                  campo=vec[i];
+                  vacio();
+                }
+
+                if(pass!=passC || pass==""){
+                  document.getElementById("password").innerHTML = "-> Las contraseñas no coinciden";
+                  document.getElementById("passC").style="border:2px solid #ff0000";
+                  document.getElementById("pass").style="border:2px solid #ff0000";lock=1;
+                }
+                else{
+                  document.getElementById("passC").style="border:2px solid #000000";
+                  document.getElementById("pass").style="border:2px solid #000000";
+                }
+
+                if(rfc.length<12){
+                  document.getElementById("claverfc").innerHTML = "-> La clave RFC debe tener un mínimo de 12 caracteres";
+                  document.getElementById("rfc").style="border:2px solid #ff0000";lock=1;
+                }
+                else{
+                  document.getElementById("rfc").style="border:2px solid #000000"; 
+                }
+
+                //Con lock, se verifica si todos los campos son correctos, de ser asi, prosigue al registro oficial de datos
+                if(lock==0){
+                  verificacion();
+                }
+          }
+
+          // funcion vacio: funcino que ahorra lineas de codigo a la funcion ingreso. Señala solo los campos vacios
+          function vacio(){
+              if(document.getElementById(campo).value==""){
+              document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+              document.getElementById(campo).style="border:2px solid #ff0000";lock=1;
+            }
+            else{
+              document.getElementById(campo).style="border:2px solid #000000";
+            }
+          }
+
+          //funcion verificacion: cambia los valores de los inputs oficiales de registro a los personales de HTML
+          //Se elimina el tag de division correspondiente a los campos manuales
+          //Hace visible el formulario oficial con los datos listos para ser registrados a MySQL
+          function verificacion()
+          {
+            var exito=0;
+            for(var x=0; x<i; x++){
+              if(nomEmpresa==empresas[x]){
+                if(email==emails[x]){
+                  document.getElementById("aviso").innerHTML = "-> El correo electrónico ya está registrado bajo esa empresa";
+                  document.getElementById("email").style="border:2px solid #ff0000"; exito=1;
+                }
+                if(rfc==rfcs[x]){
+                  document.getElementById("claverfc").innerHTML = "-> El RFC ya está registrado bajo esa empresa";
+                  document.getElementById("rfc").style="border:2px solid #ff0000"; exito=1;
+                }
+              }
+            }
+            if(exito==0){
+              document.body.innerHTML = document.body.innerHTML.replace(/nUsuario/g, nomCompleto);
+              document.body.innerHTML = document.body.innerHTML.replace(/eUsuario/g, email);
+              document.body.innerHTML = document.body.innerHTML.replace(/rUsuario/g, rfc);
+              document.body.innerHTML = document.body.innerHTML.replace(/emUsuario/g, nomEmpresa);
+              document.body.innerHTML = document.body.innerHTML.replace(/pUsuario/g, pass);
+              document.body.innerHTML = document.body.innerHTML.replace(/pcUsuario/g, passC);
+              document.getElementById("division").remove();
+              document.getElementById("division2").remove();
+              document.getElementById("formulario").hidden = false;
+            }
+          }
+
+          function redir(){
+            window.location.replace("http://localhost:3000/sys/iniciosesion");
+          }
+    </script>
+  </div>
+
+  <div id="division" class="settings"> <!-- Formulario para verificar los datos ingresados por medio de Javascript -->
+      <label id="nomCompleto1">Nombre</label>
+      <input id="nomCompleto" type="text" title="nomCompleto" placeholder="Nombre Completo" autocomplete="off"/>
+      <br><br>
+      <label id="email1">Correo Electrónico</label>
+      <input id="email" type="text" title="email" placeholder="Correo Electrónico" autocomplete="off"/>
+      <br><br>
+      <label id="rfc1">RFC</label>
+      <input id="rfc" type="text" title="rfc" placeholder="RFC" maxlength="13" autocomplete="off"/>
+      <br><br>
+      <label id="nomEmpresa1">Empresa</label>
+      <input id="nomEmpresa" type="text" title="nomEmpresa" placeholder="Nombre de la Empresa" autocomplete="off"/>
+      <br><br>
+      <label id="pass1">Contraseña</label>
+      <input id="pass" type="password" title="pass" placeholder="Contraseña" />
+      <br><br>
+      <label id="passC1">Confirmar contraseña</label>
+      <input id="passC" type="password" title="passC" placeholder="Confirmar Contraseña" />
+      <br><br>
+  </div>
+
+  <div id="division2">
+  <button id="btn" onclick="ingreso()" type="button" class="btn">Registrar</button>
+      <br><br>
+      <label id="aviso" style="color: #ff0000"></label>
+      <label id="password" style="color: #ff0000"></label>
+      <label id="claverfc" style="color: #ff0000"></label>
+      <br><br>
+      <a href="http://localhost:3000/sys/iniciosesion" onclick="redir()">Volver a inicio de sesión</a>
+    </div>
+
+<div id="formulario" class="settings" hidden> <!-- formulario final, donde se ingresaran los datos directamente a MySQL -->
+  <div class="field">
+    <%= form.label :nombre %>
+    <%= form.text_field :nombre ,:value =>"nUsuario",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :Correo_Electrónico %>
+    <%= form.text_field :email ,:value =>"eUsuario",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :RFC %>
+    <%= form.text_field :rfc ,:value =>"rUsuario",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :Empresa %>
+    <%= form.text_field :empresa ,:value =>"emUsuario",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :Contraseña %>
+    <%= form.password_field :password ,:value =>"pUsuario",:readonly => true%>
+  </div>
+
+  <div class="field">
+    <%= form.label :Confirmar_contraseña %>
+    <%= form.password_field :passwordC ,:value =>"pcUsuario",:readonly => true%>
+  </div>
+
+  <label style="color: #11bb77">
+    Datos verificados. Listos para el registro.
+  </label>
+
+  <br>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+</div>
+
+<% end %>

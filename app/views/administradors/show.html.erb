@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre de Administrador:</strong>
+  <%= @administrador.nomAdmin %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @administrador.email %>
+</p>
+
+<p>
+  <strong>RFC:</strong>
+  <%= @administrador.rfc %>
+</p>
+
+<p>
+  <strong>Empresa:</strong>
+  <%= @administrador.empresa %>
+</p>
+
+<p>
+  <strong>Contraseña:</strong>
+  <%= @administrador.contrasena %>
+</p>
+
+<p>
+  <strong>Confirmar contraseña:</strong>
+  <%= @administrador.contrasenaC %>
+</p>
+
+<%= link_to 'Edit', edit_administrador_path(@administrador) %> |
+<%= link_to 'Back', administradors_path %>

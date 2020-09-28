@@ -1,0 +1,85 @@
+<p id="notice"><%= notice %></p>
+<canvas id="myCanvas" width="500" height="1000" style="border:0px solid #D3D3D3;">
+    </canvas>
+<h1>Sucursals</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nomsucursal</th>
+      <th>Calle</th>
+      <th>Colonia</th>
+      <th>Numexterior</th>
+      <th>Numinterior</th>
+      <th>Cpostal</th>
+      <th>Ciudad</th>
+      <th>Pais</th>
+      <th>Empresa</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <script type="text/javascript">
+    var i=0;
+    var keys = Object.keys(localStorage), num=keys.length;
+    for(var j=0; j<num; j++){
+      localStorage.removeItem("nomSucursal"+j);
+      localStorage.removeItem("calle"+j);
+      localStorage.removeItem("colonia"+j);
+      localStorage.removeItem("numExterior"+j);
+      localStorage.removeItem("numInterior"+j);
+      localStorage.removeItem("cpostal"+j);
+      localStorage.removeItem("ciudad"+j);
+      localStorage.removeItem("pais"+j);
+      localStorage.removeItem("empresa"+j);
+    }
+
+  </script>
+
+  <tbody>
+    <% @sucursals.each do |sucursal| %>
+      <tr>
+        <td id="nomSucursal"><%= sucursal.nomSucursal %></td>
+        <td id="calle"><%= sucursal.calle %></td>
+        <td id="colonia"><%= sucursal.colonia %></td>
+        <td id="numExterior"><%= sucursal.numExterior %></td>
+        <td id="numInterior"><%= sucursal.numInterior %></td>
+        <td id="cpostal"><%= sucursal.cpostal %></td>
+        <td id="ciudad"><%= sucursal.ciudad %></td>
+        <td id="pais"><%= sucursal.pais %></td>
+        <td id="empresa"><%= sucursal.empresa %></td>
+        <td><%= link_to 'Show', sucursal %></td>
+        <td><%= link_to 'Edit', edit_sucursal_path(sucursal) %></td>
+        <td><%= link_to 'Destroy', sucursal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <script type="text/javascript">
+          localStorage.setItem("nomSucursal"+i, document.getElementById("nomSucursal").innerText);
+          localStorage.setItem("calle"+i, document.getElementById("calle").innerText);
+          localStorage.setItem("colonia"+i, document.getElementById("colonia").innerText);
+          localStorage.setItem("numExterior"+i, document.getElementById("numExterior").innerText);
+          localStorage.setItem("numInterior"+i, document.getElementById("numInterior").innerText);
+          localStorage.setItem("cpostal"+i, document.getElementById("cpostal").innerText);
+          localStorage.setItem("ciudad"+i, document.getElementById("ciudad").innerText);
+          localStorage.setItem("pais"+i, document.getElementById("pais").innerText);
+          localStorage.setItem("empresa"+i, document.getElementById("empresa").innerText);
+          document.getElementById("nomSucursal").remove();
+          document.getElementById("calle").remove();
+          document.getElementById("colonia").remove();
+          document.getElementById("numExterior").remove();
+          document.getElementById("numInterior").remove();
+          document.getElementById("cpostal").remove();
+          document.getElementById("ciudad").remove();
+          document.getElementById("pais").remove();
+          document.getElementById("empresa").remove();
+          i++;
+        </script>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<meta http-equiv = "refresh" content = "0; url = http://localhost:3000/empleados"/>
+<br>
+
+<%= link_to 'New Sucursal', new_sucursal_path %>

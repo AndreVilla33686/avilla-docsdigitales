@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<a id="administrator" href=""></a><a id="" href="http://localhost:3000">|| Cerrar sesion</a>
+
+
+<script type="text/javascript">
+	//console.log("Hello world!");
+	localStorage.removeItem("edit");
+	var keys = Object.keys(localStorage), key=0, num=keys.length, e=0, cont=1, edit=1;
+	let arrSucursal = [], numDeEmpleados = [], dEmpresa = [], elimSucursal = [];
+	document.getElementById("administrator").innerHTML="Bienvenido "+localStorage.getItem("uadmin")+"! ("+localStorage.getItem("uempresa")+") ";
+
+
+	for(var i=0; i<num; i++){
+		if(localStorage.getItem("nomSucursal"+i)!=null){
+	          arrSucursal[i]=localStorage.getItem("nomSucursal"+i);
+	          dEmpresa[i]=localStorage.getItem("empresa"+i);
+	          numDeEmpleados[i]=0;
+		}
+	}
+
+	for(var i=0; i<num; i++){
+		for(var j=0; j<arrSucursal.length; j++){
+			if(localStorage.getItem("sucursal"+i)==arrSucursal[j]){
+			numDeEmpleados[j]++;
+			}
+		}
+	}
+
+	function contador(){
+		localStorage.removeItem("editsucursal");
+		var row = document.getElementById("sucursales");
+		for(var x=0; x<arrSucursal.length; x++){
+  			row.rows[x+1].cells[1].innerHTML = numDeEmpleados[x];
+  			row.rows[x+1].id = (row.rows[x+1].cells[0].innerHTML);
+  			if(dEmpresa[x]!=localStorage.getItem("uempresa")){
+  				elimSucursal[e]=x;
+  				e++;
+  			}
+  		}
+  		if(e>0){
+  			for(var i=0; i<elimSucursal.length; i++){
+  				document.getElementById("sucursales").deleteRow(elimSucursal[i]+cont);
+  				cont--;
+  			}
+  			var row=document.getElementById("sucursales");
+			if(!(row.rows[1])){
+		  		var linea = row.insertRow(1);
+		  		var cell1 = linea.insertCell(0);
+		  		linea.insertCell(1);
+		  		linea.insertCell(2);
+		  		cell1.innerHTML = "No existen sucursales";
+			}
+  		}
+	}
+
+	function edicion(clicked) {
+		localStorage.setItem("Usucursal", clicked.id);
+		localStorage.setItem("editsucursal", document.getElementById("sucursales").rows[clicked.rowIndex].cells[5].innerHTML);
+		edicionSucursal();
+		//localStorage.setItem("editSucursal", row.rows[x+1].cells[1].innerHTML = numDeEmpleados[x]);
+		window.location = "http://localhost:3000/sys/edsucursal";
+	}
+
+	function edicionSucursal(){
+		var keys = Object.keys(localStorage), num=keys.length;
+		for(var x=0; x<num; x++){
+			if(localStorage.getItem("nomSucursal"+x)==localStorage.getItem("Usucursal")){
+				localStorage.setItem("Ucalle", localStorage.getItem("calle"+x));
+				localStorage.setItem("Ucolonia", localStorage.getItem("colonia"+x));
+				localStorage.setItem("UnumExt", localStorage.getItem("numExterior"+x));
+				localStorage.setItem("UnumInt", localStorage.getItem("numInterior"+x));
+				localStorage.setItem("Ucpostal", localStorage.getItem("cpostal"+x));
+				localStorage.setItem("Uciudad", localStorage.getItem("ciudad"+x));
+				localStorage.setItem("Upais", localStorage.getItem("pais"+x));
+			}
+		}
+	}
+
+	function redireccionEmp() {
+    window.location = "http://localhost:3000/empleados/new"
+	}
+
+	function redireccionSuc() {
+    window.location = "http://localhost:3000/sucursals/new"
+	}
+</script>
+
+</head>
+<body onload="contador()" >
+<h2>Administración</h2>
+
+<div class="tab">
+  <button class="tablinks" onclick="redireccionSuc()">Registrar sucursal</button>
+  <button class="tablinks" onclick="redireccionEmp()">Registrar empleado</button>
+</div>
+<p><p>
+
+<table id="sucursales" >
+  <tr>
+    <th>Sucursal</th>
+    <th>No. de Empleados</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% @sucursals.each do |sucursal| %>
+      <tr onclick="edicion(this)" >
+        <td id="nomSucursal"><%= sucursal.nomSucursal %></td>
+        <td id="empSucursal"></td>
+        <td style="display:none;"><%= link_to 'Show', sucursal %></td>
+        <td><a href="" onclick="return false;">Editar</a></td>
+        <td><%= link_to 'Destroy', sucursal, method: :delete %></td>
+        <td style="display:none;"><%= sucursal.id %></td>
+      </tr>
+   <% end %>
+</table>
+</body>
+<script type="text/javascript">
+	row = document.getElementById("sucursales");
+	if(!(row.rows[1])){
+		  		var linea = row.insertRow(1);
+		  		var cell1 = linea.insertCell(0);
+		  		linea.insertCell(1);
+		  		linea.insertCell(2);
+		  		cell1.innerHTML = "No existen sucursales";
+			}
+</script>
+</html>

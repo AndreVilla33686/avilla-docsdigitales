@@ -1,0 +1,2 @@
+class Slash < ApplicationRecord
+end

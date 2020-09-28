@@ -1,0 +1,115 @@
+// Place all the styles related to the sys controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+body {
+  background-color: lightgray;
+}
+
+html *
+{
+   font-size: 1em;
+   color: #000;
+   font-family: Verdana, sans-serif;
+   text-align: center;
+}
+
+.settings {
+		margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-left: 610px;
+		width: 210px;
+	}
+
+	.settings label{
+		display: inline-block;
+		text-align: left;
+		float: left;
+	}
+
+h2 {
+	font-size: 2em;
+   color: #000;
+   font-family: Verdana, sans-serif;
+   text-align: center;
+}
+
+input[type=text] {
+  width: 250px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 5px 10px 5px 20px;
+  transition: width 0.4s ease-in-out;
+}
+
+
+input[type=password] {
+  width: 250px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 5px 10px 5px 20px;
+  transition: width 0.4s ease-in-out;
+}
+
+select {
+  width: 250px;
+  padding: 6px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #000;
+}
+
+tr:hover {background-color:#f5f5f5;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 287px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+

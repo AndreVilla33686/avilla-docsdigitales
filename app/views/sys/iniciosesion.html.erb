@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript">
+				let emails = [], rfcs = [], passwords = [], empresas = []; 
+            	var keys = Object.keys(localStorage), i, lock, email, pass;
+            	i = keys.length/4;
+
+            	//Los registros almacenados se guardan en vectores locales
+			    for(var j=0; j<i; j++) {
+			    	emails.push(localStorage.getItem("uemail"+j));
+			    	rfcs.push(localStorage.getItem("urfc"+j));
+			    	passwords.push(localStorage.getItem("upassword"+j));
+			    	empresas.push(localStorage.getItem("uempresa"+j));
+			    }
+
+			    //funcion ingreso: se verifica que los campos cumplan con los requisitos necesarios
+				function ingreso(){
+	                email=document.getElementById("email").value;
+	                pass=document.getElementById("pass").value;
+	                document.getElementById("aviso").innerHTML = "";
+	                lock=0;
+
+	                if(email==""){
+	                	document.getElementById("aviso").innerHTML = "Favor de rellenar el campo vacío";
+	                	document.getElementById("email").style="border:2px solid #ff0000"; lock=1;
+	                }
+	                else {
+	                	document.getElementById("email").style="border:2px solid #000000";
+	                }
+
+	                if(pass==""){
+	                	document.getElementById("aviso").innerHTML = "Favor de rellenar el campo vacío";
+	                	document.getElementById("pass").style="border:2px solid #ff0000"; lock=1;
+	                }
+					else {
+						document.getElementById("pass").style="border:2px solid #000000";
+					}
+
+					if(lock==0){
+
+	                	verificar();
+	                }
+	            }
+
+	            //funcion verificar: si los campos fueron llenados correctamente se verifica si el correo y la contraseña existen
+	            function verificar(){
+
+	            	for (var z=0; z < i; z++) {
+	            		if(emails[z]==email && passwords[z]==pass){
+	            			localStorage.clear();
+	            			localStorage.setItem("uadmin", email);
+	            			localStorage.setItem("uempresa", empresas[z]);
+	            			window.location.replace("http://localhost:3000/sucursals");
+	            		} else if(emails[z]==email && passwords[z]!=pass){
+	            			document.getElementById("aviso").innerHTML = "La Contraseña es incorrecta";
+	                		document.getElementById("pass").style="border:2px solid #ff0000";
+	            		} else if (emails[z]!=email && z==i-1){
+	            			document.getElementById("aviso").innerHTML = "El correo no existe en el sistema";
+	            			document.getElementById("email").style="border:2px solid #ff0000";
+	            		}
+	            	}
+	            	if (i==0){
+	            		document.getElementById("aviso").innerHTML = "No existen correos en el sistema";
+	            		document.getElementById("email").style="border:2px solid #ff0000";
+	            	}
+	            }
+
+	            //funcion nuevo: si el usuario desea crear una nueva cuenta, se ingresa al storage los datos nuevamente y
+	            //es redireccionado al sitio de nuevo usuario
+	            function nuevo(){
+	            	window.location.replace("http://localhost:3000/usuarios/new");
+	            }
+		</script>
+	</head>
+<tbody>
+<h2>Iniciar sesión</h2>
+<div class="settings">
+  	<label>Correo Electrónico</label>
+    <input id="email" type="text" title="username" placeholder="Correo Electrónico" autocomplete="off"/>
+    <br><br>
+    <label>Contraseña</label>
+    <input id="pass" type="password" title="password" placeholder="Contraseña" />
+    <br><br>
+</div>
+<button id="xd" onclick="ingreso()" type="button" class="btn">Ingresar</button>
+    <br><br>
+    <label id="aviso" style="color: #ff0000"></label>
+    <br><br>
+    <a href="" onclick="nuevo()">Registrarse</a>
+</tbody>
+</html>
+

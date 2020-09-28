@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script type="text/javascript">
+    var Uemp=localStorage.getItem("Uempleado"), lock, nomEmpleado, rfc, sucursal, puesto;
+    var numeros = /^[0-9]+$/;
+    var letras = /^[0-9a-zA-Z ]+$/;
+    localStorage.setItem("Uempleado",Uemp);
+
+    var keys = Object.keys(localStorage), i;
+    i = keys.length;
+
+    function ingreso(){
+      
+                nomEmpleado=document.getElementById("nomEmpleado").value;
+                rfc=document.getElementById("rfc").value;
+                sucursal=document.getElementById("sucursal").value;
+                puesto=document.getElementById("puesto").value;
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("password").innerHTML = "";
+                document.getElementById("claverfc").innerHTML = "";
+
+                if(!(nomEmpleado.match(letras))){
+                  document.getElementById("aviso").innerHTML = "-> Nombre de empleado invalido (solo caracteres)";
+                  document.getElementById("nomEmpleado").style="border:2px solid #ff0000"; lock=1;
+                }
+                else{
+                  document.getElementById("nomEmpleado").style="border:2px solid #000000";
+                }
+
+                if(!(rfc.match(letras))){
+                  document.getElementById("password").innerHTML = "-> RFC invalido (solo caracteres)";
+                  document.getElementById("rfc").style="border:2px solid #ff0000"; lock=1;
+                }
+                else if(rfc.length<12){
+                  document.getElementById("password").innerHTML = "-> RFC invalido (no menos de 12 caracteres)";
+                  document.getElementById("rfc").style="border:2px solid #ff0000"; lock=1;
+                } else{
+                  document.getElementById("rfc").style="border:2px solid #000000";
+                }
+
+                if(!(puesto.match(letras))){
+                  document.getElementById("claverfc").innerHTML = "-> Puesto invalido (solo caracteres)";
+                  document.getElementById("puesto").style="border:2px solid #ff0000"; lock=1;
+                }
+                else{
+                  document.getElementById("puesto").style="border:2px solid #000000";
+                }
+
+                //Con lock, se verifica si todos los campos son correctos, de ser asi, prosigue al registro oficial de datos
+                if(lock==0){
+                  localStorage.setItem("UnombreEmp", document.getElementById("nomEmpleado").value);
+                  localStorage.setItem("UsucursalEmp", document.getElementById("sucursal").value);
+                  localStorage.setItem("Upuesto", document.getElementById("puesto").value);
+                  window.location = "http://localhost:3000/empleados/"+localStorage.getItem("editempleado")+"/edit";
+                }
+          }
+
+    function sucursalFiltro(){
+              for(var j=0; j<i; j++){
+                  var z = document.getElementById("sucursal");
+                  var option = document.createElement("option");
+                  var s = localStorage.getItem("nomSucursal"+j);
+                  if(s!=null){
+                    if(localStorage.getItem("empresa"+j)==localStorage.getItem("uempresa")){
+                      option.text = localStorage.getItem("nomSucursal"+j);
+                      z.add(option);
+                    }
+                  }
+                }
+            }
+
+    function volver(){
+      window.location = "http://localhost:3000/sys/edsucursal";
+    }
+</script>
+</head>
+<body onload="sucursalFiltro()">
+<div class="log-form">
+
+  <h2>Registrar Sucursal</h2>
+  <form>
+
+    <input id="nomEmpleado" type="text" title="nomEmpleado" placeholder="Nombre del Empleado" autocomplete="off"/>
+    <br><br>
+    <select name="sucursal" id="sucursal">
+  	</select>
+    <br><br>
+    <input id="rfc" type="text" title="rfc" placeholder="RFC" readonly=""/>
+    <br><br>
+    <input id="puesto" type="text" title="puesto" placeholder="Nombre del puesto" autocomplete="off"/>
+    <br><br>
+    <button onclick="ingreso()" type="button" class="btn">Registrar</button>
+    <br><br>
+    <label id="aviso" style="color: #ff0000"></label>
+    <br><br>
+    <label id="password" style="color: #ff0000"></label>
+    <br><br>
+    <label id="claverfc" style="color: #ff0000"></label>
+    <br><br>
+    <a href="" onclick="volver()">Regresar a la edición de sucursal</a>
+  </form>
+</div><!--end log form -->
+<script type="text/javascript">
+   document.getElementById("rfc").value=Uemp;
+   document.getElementById("nomEmpleado").value=localStorage.getItem("UnombreEmp");
+   document.getElementById("sucursal").value=localStorage.getItem("UsucursalEmp");
+   document.getElementById("puesto").value=localStorage.getItem("Upuesto");
+</script>
+
+</body>
+</html>

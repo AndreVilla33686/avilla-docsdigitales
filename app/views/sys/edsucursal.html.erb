@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript">
+		var i=0;
+		var keys = Object.keys(localStorage), key=0, num=keys.length, e=0, cont=1, edit=1, lock, nomSucursal, calle, colonia, numExterior, numInterior, cpostal, ciudad, pais;
+		let arrEmpleado = [], numDeEmpleados = [], dSucursal = [], elimSucursal = [];
+		var numeros = /^[0-9]+$/;
+      	var letras = /^[0-9a-zA-Z]+$/;
+
+		for(var i=0; i<num; i++){
+		if(localStorage.getItem("rfc"+i)!=null){
+	          arrEmpleado[i]=localStorage.getItem("rfc"+i);
+			}
+		}
+
+		function asignar(){
+			var row = document.getElementById("empleados");
+			var lista = document.getElementById("empleados").rows.length;
+			for(var i=0; i<arrEmpleado.length; i++){
+				for(var j=0; j<lista; j++){
+					if(row.rows[j].cells[2].innerHTML == arrEmpleado[i]){
+						row.rows[j].id = (row.rows[j].cells[2].innerHTML);
+						//window.alert(row.rows[j].cells[5].id);
+					}
+				}
+			}
+		}
+		
+			function ingreso(){
+                nomSucursal=document.getElementById("nomSucursal").value;
+                calle=document.getElementById("calle").value;
+                colonia=document.getElementById("colonia").value;
+                numExterior=document.getElementById("numExt").value;
+                numInterior=document.getElementById("numInt").value;
+                cpostal=document.getElementById("codPostal").value;
+                ciudad=document.getElementById("ciudad").value;
+                pais=document.getElementById("pais").value;
+
+                lock=0;
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("numext").innerHTML = "";
+                document.getElementById("numint").innerHTML = "";
+                document.getElementById("cp").innerHTML = "";
+                //window.alert("");
+
+                if(!(nomSucursal.match(letras))){
+                  document.getElementById("aviso").innerHTML = "-> El nombre de sucursal no es valido (no caracteres especiales)";
+                  document.getElementById("nomSucursal").style="border:2px solid #ff0000";lock=1;
+                } else {
+                  document.getElementById("nomSucursal").style="border:2px solid #000000";
+                }
+
+                if(numExterior!=""){
+                  if(!(numExterior.match(numeros))){
+                    document.getElementById("numext").innerHTML = "-> El numero exterior no es valido (solo numeros)"; 
+                    document.getElementById("numExt").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("numExt").style="border:2px solid #000000";
+                  }
+              }
+
+                if(numInterior!=""){
+                  if(!(numInterior.match(numeros))){
+                    document.getElementById("numint").innerHTML = "-> El numero interior no es valido (solo numeros)"; 
+                    document.getElementById("numInt").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("numInt").style="border:2px solid #000000";
+                  }
+              }
+
+                if(cpostal!=""){
+                  if(!(cpostal.match(numeros))){
+                    document.getElementById("cp").innerHTML = "-> El codigo postal solo debe contener numeros"; 
+                    document.getElementById("codPostal").style="border:2px solid #ff0000";lock=1;
+                  } else if(cpostal.length!=5){
+                    document.getElementById("cp").innerHTML = "-> El codigo postal solo debe contener 5 numeros"; 
+                    document.getElementById("codPostal").style="border:2px solid #ff0000";lock=1;
+                  } else {
+                    document.getElementById("codPostal").style="border:2px solid #000000";
+                  }
+              }
+
+                //Con lock, se verifica si todos los campos son correctos, de ser asi, prosigue al registro oficial de datos
+                if(lock==0){
+                	localStorage.setItem("EnomSucursal", nomSucursal);
+                	localStorage.setItem("Ecalle", calle);
+                	localStorage.setItem("Ecolonia", colonia);
+                	localStorage.setItem("EnumExterior", numExterior);
+                	localStorage.setItem("EnumInterior", numInterior);
+                	localStorage.setItem("Ecpostal", cpostal);
+                	localStorage.setItem("Eciudad", ciudad);
+                	localStorage.setItem("Epais", pais);
+                  window.location = "http://localhost:3000/sucursals/"+localStorage.getItem("editsucursal")+"/edit";
+                }
+          }
+
+    		function edicion(clicked) {
+				localStorage.setItem("Uempleado", clicked.id);
+				localStorage.setItem("editempleado", document.getElementById("empleados").rows[clicked.rowIndex].cells[6].innerHTML);
+				edicionEmpleado();
+				//localStorage.setItem("editSucursal", row.rows[x+1].cells[1].innerHTML = numDeEmpleados[x]);
+				window.location = "http://localhost:3000/sys/edempleado";
+			}
+
+			function edicionEmpleado(){
+			var keys = Object.keys(localStorage), num=keys.length;
+			for(var x=0; x<num; x++){
+				if(localStorage.getItem("rfc"+x)==localStorage.getItem("Uempleado")){
+					localStorage.setItem("UnombreEmp", localStorage.getItem("nomEmpleado"+x));
+					localStorage.setItem("UsucursalEmp", localStorage.getItem("sucursal"+x));
+					localStorage.setItem("Upuesto", localStorage.getItem("puesto"+x));
+				}
+		}
+	}
+</script>
+
+</head>
+<body onload="asignar()">
+	<h2>Editar Sucursal</h2>
+<div class="settings">
+  	<label>Nombre de sucursal</label>
+    <input id="nomSucursal" type="text" title="nomSucursal" placeholder="Nombre de sucursal" />
+    <br><br>
+    <label>Calle</label>
+    <input id="calle" type="text" title="calle" placeholder="Calle" autocomplete="off"/>
+    <br><br>
+    <label>Colonia</label>
+    <input id="colonia" type="text" title="colonia" placeholder="Colonia" autocomplete="off"/>
+    <br><br>
+    <label>Numero exterior</label>
+    <input id="numExt" type="text" title="numExt" placeholder="Número Exterior" autocomplete="off"/>
+    <br><br>
+    <label>Numero interior</label>
+    <input id="numInt" type="text" title="numInt" placeholder="Número Interior" autocomplete="off"/>
+    <br><br>
+    <label>Codigo postal</label>
+    <input id="codPostal" type="text" title="codPostal" placeholder="Código Postal" autocomplete="off"/>
+    <br><br>
+    <label>Ciudad</label>
+    <input id="ciudad" type="text" title="ciudad" placeholder="Ciudad" autocomplete="off"/>
+    <br><br>
+    <label>Pais</label>
+    <input id="pais" type="text" title="pais" placeholder="País" autocomplete="off"/>
+    <br><br>
+  </div><!--end log form -->
+  <div>
+  	<button onclick="ingreso()" type="button" class="btn">Registrar</button>
+    <br><br>
+    <label id="aviso" style="color: #ff0000"></label>
+    <label id="numext" style="color: #ff0000"></label>
+    <label id="numint" style="color: #ff0000"></label>
+    <label id="cp" style="color: #ff0000"></label>
+  </div>
+
+  <script type="text/javascript">
+  	if(localStorage.getItem("Usucursal") != null){
+				document.getElementById("nomSucursal").value = localStorage.getItem("Usucursal");
+				document.getElementById("calle").value = localStorage.getItem("Ucalle");
+				document.getElementById("colonia").value = localStorage.getItem("Ucolonia");
+				document.getElementById("numExt").value = localStorage.getItem("UnumExt");
+				document.getElementById("numInt").value = localStorage.getItem("UnumInt");
+				document.getElementById("codPostal").value = localStorage.getItem("Ucpostal");
+				document.getElementById("ciudad").value = localStorage.getItem("Uciudad");
+				document.getElementById("pais").value = localStorage.getItem("Upais");
+				document.getElementById("nomSucursal").readOnly = true;
+			}
+  </script>
+
+<tbody>
+<table id="empleados">
+  <thead>
+    <tr>
+      <th>Nombre de empleado</th>
+      <th>Sucursal</th>
+      <th>Rfc</th>
+      <th>Puesto</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <script type="text/javascript">
+    var i=0;
+  </script>
+    <% @empleados.each do |empleado| %>
+      <tr onclick="edicion(this)">
+        <td name="nomEmpleadoTD"><%= empleado.nomEmpleado %></td>
+        <td id="sucursal"><%= empleado.sucursal %></td>
+        <td id="rfc"><%= empleado.rfc %></td>
+        <td id="puesto"><%= empleado.puesto %></td>
+        <td ><a href="" onclick="return false()">Editar</a></td>
+        <td><%= link_to 'Destroy', empleado, method: :delete%></td>
+        <td style="display:none;"><%= empleado.id %></td>
+        <script type="text/javascript">
+        	i++;
+        </script>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p><p>
+<a href="http://localhost:3000/sucursals">Regresar a la Página Principal</a>
+<script type="text/javascript">
+	var row=document.getElementById("empleados");
+	for(var j=i; j>0; j--){
+		if(row.rows[j].cells[1].innerHTML != localStorage.getItem("Usucursal"))
+			row.deleteRow(j);
+	}
+	if(!(row.rows[1])){
+  		var linea = row.insertRow(1);
+  		var cell1 = linea.insertCell(0);
+  		linea.insertCell(1);
+  		linea.insertCell(2);
+  		linea.insertCell(3);
+  		linea.insertCell(4);
+  		cell1.innerHTML = "No existen empleados en esta sucursal";
+	}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<%= form_with(model: administrador, local: true) do |form| %>
+  <% if administrador.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(administrador.errors.count, "error") %> prohibited this administrador from being saved:</h2>
+
+      <ul>
+        <% administrador.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <% @administradors.each do |administrador| %>
+      <td id="administradors"><%= administrador.nomAdmin %></td>
+    <% end %>
+  </div>>
+  <div>
+    <script type="text/javascript">
+          function ingreso(){
+                var nomCompleto=document.getElementById("nomCompleto").value;
+                var email=document.getElementById("email").value;
+                var rfc=document.getElementById("rfc").value;
+                var nomEmpresa=document.getElementById("nomEmpresa").value;
+                var pass=document.getElementById("pass").value;
+                var passC=document.getElementById("passC").value;
+                var ciudad=document.getElementById("ciudad").value;
+                var pais=document.getElementById("pais").value;
+                var i=0;
+
+                document.getElementById("aviso").innerHTML = "";
+                document.getElementById("password").innerHTML = "";
+                document.getElementById("claverfc").innerHTML = "";
+
+                if(nomCompleto==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("nomCompleto").style="border:2px solid #ff0000";
+                } 
+                else {
+                  document.getElementById("nomCompleto").style="border:2px solid #000000"; i++;
+                }
+
+                if(email==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("email").style="border:2px solid #ff0000";
+                } 
+                else{
+                  document.getElementById("email").style="border:2px solid #000000"; i++;
+                }
+
+                if(rfc==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("rfc").style="border:2px solid #ff0000";
+                }
+                else {
+                  document.getElementById("rfc").style="border:2px solid #000000"; i++;
+                }
+
+                if(pass==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                document.getElementById("pass").style="border:2px solid #ff0000";
+                } 
+                else {
+                document.getElementById("pass").style="border:2px solid #000000"; i++;
+                }
+
+                if(passC==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("passC").style="border:2px solid #ff0000";
+                } 
+                else {
+                  document.getElementById("passC").style="border:2px solid #000000"; i++;
+                }
+
+                if(ciudad==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("ciudad").style="border:2px solid #ff0000";
+                } 
+                else {
+                  document.getElementById("ciudad").style="border:2px solid #000000"; i++;
+                }
+
+                if(pais==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("pais").style="border:2px solid #ff0000";
+                } 
+                else {
+                  document.getElementById("pais").style="border:2px solid #000000"; i++;
+                }
+
+                if(nomEmpresa==""){
+                  document.getElementById("aviso").innerHTML = "-> Favor de llenar todos los campos";
+                  document.getElementById("nomEmpresa").style="border:2px solid #ff0000";
+                } 
+                else {
+                  document.getElementById("nomEmpresa").style="border:2px solid #000000"; i++;
+                }
+
+                if(pass!=passC || pass=="")
+                {
+                  document.getElementById("password").innerHTML = "-> Las contraseñas no coinciden";
+                  document.getElementById("passC").style="border:2px solid #ff0000";
+                  document.getElementById("pass").style="border:2px solid #ff0000";
+                }
+                else
+                {
+                  document.getElementById("passC").style="border:2px solid #000000";
+                  document.getElementById("pass").style="border:2px solid #000000";
+                }
+
+                if(rfc.length<12)
+                {
+                  document.getElementById("claverfc").innerHTML = "-> La clave RFC debe tener un mínimo de 12 caracteres";
+                  document.getElementById("rfc").style="border:2px solid #ff0000";
+                }
+                else
+                {
+                  document.getElementById("rfc").style="border:2px solid #000000";
+                }
+          }
+
+          function verificacion()
+          {
+
+          }
+
+          function calar()
+          {
+            document.body.innerHTML = document.body.innerHTML.replace("xdddd", 'allaaa');
+          }
+    </script>
+  </div>
+
+  <div>
+    <form>
+      <label>Nombre</label>
+      <input id="nomCompleto" type="text" title="nomCompleto" placeholder="Nombre Completo" />
+      <br><br>
+      <label>Correo Electrónico</label>
+      <input id="email" type="text" title="email" placeholder="Correo Electrónico" />
+      <br><br>
+      <label>RFC</label>
+      <input id="rfc" type="text" title="rfc" placeholder="RFC" minlength="12" maxlength="13"/>
+      <br><br>
+      <label>Empresa</label>
+      <input id="nomEmpresa" type="text" title="nomEmpresa" placeholder="Nombre de la Empresa" />
+      <br><br>
+      <label>Contraseña</label>
+      <input id="pass" type="password" title="pass" placeholder="Contraseña" />
+      <br><br>
+      <label>Confirmar contraseña</label>
+      <input id="passC" type="password" title="passC" placeholder="Confirmar Contraseña" />
+      <br><br>
+      <label>Ciudad</label>
+      <input id="ciudad" type="text" title="ciudad" placeholder="Ciudad"/>
+      <br><br>
+      <label>País</label>
+      <input id="pais" type="text" title="pais" placeholder="Pais" />
+      <br><br>
+      <button onclick="ingreso()" type="button" class="btn">Registrar</button>
+      <br><br>
+      <label id="aviso" style="color: #ff0000"></label>
+      <label id="password" style="color: #ff0000"></label>
+      <label id="claverfc" style="color: #ff0000"></label>
+      <br><br>
+      <a href="http://localhost:3000/sys/iniciosesion">Volver a inicio de sesión</a>
+    </form>
+  </div>
+
+    <div class="field">
+      <%= form.label :Nombre %>
+      <%= form.text_field :nomAdmin,:value => ""%>
+    </div>
+
+    <div class="field">
+      <%= form.label :Email %>
+      <%= form.text_field :email %>
+    </div>
+
+    <div class="field">
+      <%= form.label :RFC %>
+      <%= form.text_field :rfc %>
+    </div>
+
+    <div class="field">
+      <%= form.label :Empresa %>
+      <%= form.text_field :empresa %>
+    </div>
+
+    <div class="field">
+      <%= form.label :Contraseña %>
+      <%= form.password_field :contrasena %>
+    </div>
+
+    <div class="field">
+      <%= form.label :Confirmar %>
+      <%= form.password_field :contrasenaC %>
+    </div>
+
+    <script type="text/javascript">
+      
+    </script>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+
+  
+<% end %>
